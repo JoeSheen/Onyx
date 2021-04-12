@@ -13,7 +13,7 @@ impl Block {
     // function for creating a new block instance
     pub fn new(index: u32, prev: Vec<u8>, transactions: Vec<Transaction>) -> Block {
         let time = now();
-        return Block{
+        return Block {
             index: index,
             timestamp: time,
             nonce: 0,
@@ -23,13 +23,22 @@ impl Block {
         };
     }
 
-    // function for mineing a block
+    // function for mining a block
     pub fn mine_block(&mut self) {
         //TODO: Finish
+        for nonce_val in 0..=(u128::MAX) {
+            self.nonce = nonce_val;
+            let hash = self.hash();
+            if validate_hash(hash.clone()) == true {
+                self.hash = hash;
+                println!("--- Block Mined ---");
+                return;
+            }
+        }
     }
 }
 
-// implementation of bytes func for Hash trait of block obj
+// implementation of bytes function for Hash trait of block obj
 impl Hash for Block {
     fn bytes(&self) -> Vec<u8> {
         let mut bytes: Vec<u8> = vec![];
@@ -38,8 +47,19 @@ impl Hash for Block {
         bytes.extend(&self.timestamp.to_ne_bytes());
         bytes.extend(&self.nonce.to_ne_bytes());
         bytes.extend(&self.prev_hash);
-        // TODO: add transactions -> bytes.extend(&self.transactions);
-
+        bytes.extend(&self.transactions
+            .iter().flat_map(|transaction| transaction.bytes())
+            .collect::<Vec<u8>>()
+        );
+        
         return bytes;
+    }
+}
+
+pub fn validate_hash(hash: Vec<u8>) -> bool {
+    if hash[0] > 205 {
+        return true;
+    } else {
+        return false;
     }
 }

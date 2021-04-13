@@ -15,11 +15,22 @@ impl Blockchain {
         };
     }
 
-    //pub fn validate_block(){}
+    //Test function for checking block works correctly 
+    pub fn validate_block(&mut self, block: Block) {
+        if block.hash == vec![0; 32] {
+            return;
+        } else {
+            self.chain.push(block);
+            return;
+        }
+    }
 
     pub fn mine_pending_transactions(&mut self, miner_addr: String) {
         let _ma = miner_addr;
     }
+
+    //pub fn add_transaction(self, sender, reciever, amt, keyString, senderKey) {}
+    //add_genesis_block
 
     pub fn last_block(&self) -> Option<&Block> {
         return self.chain.last().clone();

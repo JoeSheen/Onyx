@@ -1,7 +1,7 @@
 use onyxlib::*;
 fn main() {
     println!("--- START ---");
-    let /*mut*/ blockchain = Blockchain::new();
+    let mut blockchain = Blockchain::new();
     let t0 = Transaction::new("Sender".to_owned(), "Reciever".to_owned(), 120.00);
     let t1 = Transaction::new("Bob".to_owned(), "Alice".to_owned(), 85.70);
     let mut genesis_block = Block::new(0, vec![0; 32], vec![t0, t1]);
@@ -17,11 +17,11 @@ fn main() {
             genesis_block.transactions.len(),
         );
 
-    //blockchain.validate_block(genesis_block);
-
+    blockchain.validate_block(genesis_block);
+    
     let mut prev_hash: Vec<u8> = vec![0; 32];
 
-    for index in 1..=4 {
+    for index in 1..=9 {
         let b = blockchain.last_block();
         match b {
             Some(block) => prev_hash = block.hash.clone(),
@@ -38,7 +38,7 @@ fn main() {
             hex::encode(next_block.prev_hash.clone()),
             next_block.transactions.len(),
         );
-        //blockchain.validate_block(next_block);
+        blockchain.validate_block(next_block);
     }
     println!("------\nchain len: {:?}", blockchain.chain.len());
     println!("--- END ---");

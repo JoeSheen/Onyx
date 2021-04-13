@@ -14,6 +14,7 @@ const DIFFICULTY: u128 = 2;
 pub fn now () -> u128 {
     let duration_time = SystemTime::now().duration_since(UNIX_EPOCH).unwrap();
     let time = duration_time.as_secs() as u128 * 1000 + duration_time.subsec_millis() as u128;
+    //let time = duration_time.as_millis();
     return time;
 }
 
@@ -26,15 +27,11 @@ pub trait Hash {
     fn bytes(&self) -> Vec<u8>;
 }
 
-pub fn set_difficulty() -> Vec<u8> { //String {
-    /*let mut difficulty_string: String = String::new();
-    for i in 0..DIFFICULTY {
-        difficulty_string.push_str(&i.to_string());
-    }
-    return difficulty_string;*/
-    let mut difficulty_vec: Vec<u8> = vec![];
+// rename function
+pub fn set_difficulty() -> String {
+    let mut diff_string: String = String::new();
     for _i in 0..=DIFFICULTY {
-        difficulty_vec.push(0);
+        diff_string.push_str("0");
     }
-    return difficulty_vec;
+    return diff_string;
 }

@@ -56,10 +56,15 @@ impl Hash for Block {
     }
 }
 
+// function to validate hash is correct
 pub fn validate_hash(hash: Vec<u8>) -> bool {
-    if hash[0] > 205 {
+    let hex_hash = hex::encode(hash);
+    let target = set_difficulty();
+    if hex_hash.starts_with(&target) {
         return true;
     } else {
         return false;
     }
 }
+
+//TODO add display method for block

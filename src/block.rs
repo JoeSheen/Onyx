@@ -25,7 +25,6 @@ impl Block {
 
     // function for mining a block
     pub fn mine_block(&mut self) {
-        //TODO: Finish
         for nonce_val in 0..=(u128::MAX) {
             self.nonce = nonce_val;
             let hash = self.hash();
@@ -59,7 +58,7 @@ impl Hash for Block {
 // function to validate hash is correct
 pub fn validate_hash(hash: Vec<u8>) -> bool {
     let hex_hash = hex::encode(hash);
-    let target = set_difficulty();
+    let target = generate_target_hash();
     if hex_hash.starts_with(&target) {
         return true;
     } else {

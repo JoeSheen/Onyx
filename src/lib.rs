@@ -27,11 +27,12 @@ pub trait Hash {
     fn bytes(&self) -> Vec<u8>;
 }
 
-// rename function
-pub fn set_difficulty() -> String {
-    let mut diff_string: String = String::new();
+// function that generates the target hash prefox for each block being validated
+// e.g. 3 leading zeroes
+pub fn generate_target_hash() -> String {
+    let mut target: String = String::new();
     for _i in 0..=DIFFICULTY {
-        diff_string.push_str("0");
+        target.push_str("0");
     }
-    return diff_string;
+    return target;
 }

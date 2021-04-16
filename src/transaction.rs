@@ -2,19 +2,19 @@ use super::*;
 
 pub struct Transaction {
     pub timestamp: u128,
-    pub sender: String,
-    pub reciever: String,
+    pub sender: PublicKey,
+    pub reciever: PublicKey,
     pub amount: f32,
 }
 
 impl Transaction {
     // function for creating a new transaction
-    pub fn new(sender: String, reciever: String, amt: f32) -> Transaction {
+    pub fn new(sender_key: PublicKey, reciever_key: PublicKey, amt: f32) -> Transaction {
         let time = now();
         return Transaction {
             timestamp: time,
-            sender: sender,
-            reciever: reciever,
+            sender: sender_key,
+            reciever: reciever_key,
             amount: amt,
         };
     }
@@ -26,8 +26,8 @@ impl Hash for Transaction {
         let mut bytes: Vec<u8> = vec![];
 
         bytes.extend(&self.timestamp.to_ne_bytes());
-        bytes.extend(&self.sender.clone().into_bytes());
-        bytes.extend(&self.reciever.clone().into_bytes());
+        bytes.extend(&self.sender.to_bytes());
+        bytes.extend(&self.reciever.to_bytes());
         bytes.extend(&self.amount.to_ne_bytes());
         
         return bytes;

@@ -5,6 +5,7 @@ pub struct Transaction {
     pub sender: PublicKey,
     pub reciever: PublicKey,
     pub amount: f32,
+    pub signature: Option<Signature>,
 }
 
 impl Transaction {
@@ -16,7 +17,17 @@ impl Transaction {
             sender: sender_key,
             reciever: reciever_key,
             amount: amt,
+            signature: None,
         };
+    }
+
+    // function that can be used to sign transactions
+    pub fn sign_transaction(&mut self, keypair: Keypair) {
+        if self.sender == keypair.public {
+            self.signature = Some(keypair.sign(&self.hash()));
+        } else {
+            println!("Error: Failed to sign transaction");
+        }
     }
 }
 
@@ -29,7 +40,10 @@ impl Hash for Transaction {
         bytes.extend(&self.sender.to_bytes());
         bytes.extend(&self.reciever.to_bytes());
         bytes.extend(&self.amount.to_ne_bytes());
-        
+        // allows a signature to be included as part of the hash
+        if let Some(signed) = self.signature {
+            bytes.extend(&signed.to_bytes());
+        }
         return bytes;
     }
 }

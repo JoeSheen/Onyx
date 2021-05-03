@@ -1,3 +1,4 @@
+use std::fmt;
 use std::time::{SystemTime, UNIX_EPOCH};
 use ed25519_dalek::*;
 use rand::rngs::OsRng;
@@ -13,6 +14,10 @@ pub use crate::wallet::Wallet;
 // const values used within crypto system
 const MINING_REWARD: f32 = 100.00;
 const DIFFICULTY: u128 = 2;
+const BLOCKCHAIN_PUBLIC_KEY_ARRAY: [u8; 32] = [
+    215,  90, 152,   1, 130, 177,  10, 183, 213,  75, 254, 211, 201, 100,   7,  58,
+    14, 225, 114, 243, 218, 166,  35,  37, 175,   2,  26, 104, 247,   7,   81, 26
+]; //d75a980182b10ab7d54bfed3c964073a0ee172f3daa62325af021a68f707511a
 
 // function for calculating the current time in milliseconds
 pub fn now () -> u128 {
@@ -28,6 +33,11 @@ pub trait Hash {
     fn bytes(&self) -> Vec<u8>;
 }
 
+// trait to validate that a blockchain object is correct
+pub trait Valid {
+    fn is_valid(&self) -> bool;
+}
+
 // function that generates the target hash prefox for each block being validated
 // e.g. 3 leading zeroes
 pub fn generate_target_hash() -> String {
@@ -36,4 +46,14 @@ pub fn generate_target_hash() -> String {
         target.push_str("0");
     }
     return target;
+}
+
+// function to convert the BLOCKCHAIN_PUBLIC_KEY_ARRAY into PublicKey
+pub fn generate_blockchain_key(bpk: &[u8; 32]) -> PublicKey {
+    let key = match PublicKey::from_bytes(bpk) {
+        Ok(key) => key,
+        Err(error) => panic!("Problem with blockchain public key: {:?}", error),
+    };
+
+    return key;
 }

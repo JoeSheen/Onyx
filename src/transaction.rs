@@ -1,5 +1,6 @@
 use super::*;
 
+#[derive(Clone)]
 pub struct Transaction {
     pub timestamp: u128,
     pub sender: PublicKey,
@@ -45,5 +46,30 @@ impl Hash for Transaction {
             bytes.extend(&signed.to_bytes());
         }
         return bytes;
+    }
+}
+
+// implementation of is_valid function for valid trait for transactions
+impl Valid for Transaction {
+    fn is_valid(&self) -> bool {
+        //todo!()
+        return true;
+    }
+}
+
+// implementation of fmt::Display for Transaction
+impl fmt::Display for Transaction {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "      - timestamp: {}\n      - sender: {}\n      - reciever: {}\n      - amount: {}\n      - signature: {}", 
+            self.timestamp,
+            hex::encode(self.sender),
+            hex::encode(self.reciever),
+            self.amount,
+            if let Some(signature) = self.signature {
+                hex::encode(signature)
+            } else {
+                "None".to_owned()
+            }
+        )
     }
 }

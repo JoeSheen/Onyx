@@ -30,7 +30,6 @@ impl Block {
             let hash = self.hash();
             if validate_hash(hash.clone()) == true {
                 self.hash = hash;
-                println!("--- Block Mined ---");
                 return;
             }
         }
@@ -55,6 +54,18 @@ impl Hash for Block {
     }
 }
 
+// implementation of is_valid() function for Valid trait of block
+impl Valid for Block {
+    fn is_valid(&self) -> bool {
+        for transaction in &self.transactions {
+            if !transaction.is_valid() {
+                return false;
+            }
+        }
+        return true;
+    }
+}
+
 // function to validate hash is correct
 pub fn validate_hash(hash: Vec<u8>) -> bool {
     let hex_hash = hex::encode(hash);
@@ -66,4 +77,16 @@ pub fn validate_hash(hash: Vec<u8>) -> bool {
     }
 }
 
-//TODO add display method for block
+// implementation of fmt::Display for Block
+impl fmt::Display for Block {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "Block[{}]:\n   - hash: {}\n   - timestamp: {}\n   - nonce: {}\n   - prev: {}\n   - transaction(s): {}", 
+            self.index,
+            hex::encode(self.hash.clone()),
+            self.timestamp,
+            self.nonce.clone(),
+            hex::encode(self.prev_hash.clone()),
+            self.transactions.len(),
+        )
+    }
+}

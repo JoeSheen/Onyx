@@ -18,6 +18,7 @@ const BLOCKCHAIN_PUBLIC_KEY_ARRAY: [u8; 32] = [
     215,  90, 152,   1, 130, 177,  10, 183, 213,  75, 254, 211, 201, 100,   7,  58,
     14, 225, 114, 243, 218, 166,  35,  37, 175,   2,  26, 104, 247,   7,   81, 26
 ]; //d75a980182b10ab7d54bfed3c964073a0ee172f3daa62325af021a68f707511a
+static mut MINING_ADDR: Vec<PublicKey> = vec![];
 
 // function for calculating the current time in milliseconds
 pub fn now () -> u128 {
@@ -52,8 +53,15 @@ pub fn generate_target_hash() -> String {
 pub fn generate_blockchain_key(bpk: &[u8; 32]) -> PublicKey {
     let key = match PublicKey::from_bytes(bpk) {
         Ok(key) => key,
-        Err(error) => panic!("Problem with blockchain public key: {:?}", error),
+        Err(error) => panic!("Error: Problem with blockchain public key: {:?}", error),
     };
 
     return key;
+}
+
+// function for adding new miner to blockchain 
+pub fn register_mining_addr(public_key: PublicKey) {
+    unsafe {
+        MINING_ADDR.push(public_key);
+    }
 }

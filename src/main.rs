@@ -1,5 +1,6 @@
 use onyxlib::*;
 use ed25519_dalek::*;
+use rand::Rng; // added RNG for testing purposes
 
 fn main() {
     println!("--- START ---");
@@ -39,10 +40,12 @@ fn main() {
 
     blockchain.mine_pending_transactions(w1.public_key);
 
-    /*for _i in 0..2 {
+    for _i in 0..9 {
+        let mut rng = rand::thread_rng();
+        let amount = rng.gen_range(1.00, 1000000.00);
         let w5: Wallet = Wallet::new();
         let w6: Wallet = Wallet::new();
-        let mut t4: Transaction = Transaction::new(w5.public_key, w6.public_key, 185.70);
+        let mut t4: Transaction = Transaction::new(w5.public_key, w6.public_key, amount);
 
         t4.sign_transaction(
             Keypair {
@@ -52,20 +55,25 @@ fn main() {
         );
 
         blockchain.add_transaction(t4);
-    }*/
+    }
 
     blockchain.mine_pending_transactions(w2.public_key);
 
     for block in &blockchain.chain {
         println!("{}", block);
-        //println!("   - is_valid: {:?}", next_block.is_valid());
+        println!("   - is_valid: {:?}", block.is_valid());
         for transaction in &block.transactions {
             println!("{}", transaction);
         }
     }
 
     println!("------\nblockchain length: {:?}", blockchain.chain.len());
-    //println!("Is blockchain valid? {}", blockchain.is_valid());
+    print!("Is blockchain valid?: ");
+    if blockchain.is_valid() == true {
+        println!("YES!")
+    } else {
+        println!("NO!")
+    }
 
     println!("--- END ---");
 }

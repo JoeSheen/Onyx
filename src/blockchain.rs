@@ -1,5 +1,4 @@
 use super::*;
-//TODO coment and finish code
 
 pub struct Blockchain {
     pub chain: Vec<Block>,
@@ -10,7 +9,7 @@ pub struct Blockchain {
 }
 
 impl Blockchain {
-    //
+    // function for creating blockchain instance
     pub fn new() -> Blockchain {
         return Blockchain {
             chain: vec![],
@@ -21,7 +20,7 @@ impl Blockchain {
         };
     }
 
-    //
+    // function for mining any transactions not yet added to the blockchain instance
     pub fn mine_pending_transactions(&mut self, miner_key: PublicKey) {
         // adds genesis block if chain is empty
         if self.chain.len() == 0 {
@@ -43,7 +42,7 @@ impl Blockchain {
         let prev_block: Option<&Block> = self.chain.last();
         match prev_block {
             Some(block) => prev_hash = block.hash.clone(),
-            None => println!("Error: failed to find last block hash"), //panic!()
+            None => println!("Error: failed to find last block hash"),
         }
         
         let mut block: Block = Block::new(self.increment_id(), prev_hash, self.pending_transactions.to_vec());
@@ -59,28 +58,35 @@ impl Blockchain {
         self.pending_transactions.clear();
     }
 
-    //TODO -> finish
+    //function for adding pending transactions
     pub fn add_transaction(&mut self, transaction: Transaction) {
         // adds genesis block if the blockchain is empty
         if self.chain.len() == 0 {
             self.add_genesis_block();
         }
 
-        /*if transaction.is_valid() != true {
+        // check to see if sender and receiver addresses are valid
+        unsafe {
+            if !MINING_ADDR.contains(&transaction.sender) && !MINING_ADDR.contains(&transaction.reciever) {
+                println!("Error: invalid address")
+            }
+        }
+
+        if transaction.is_valid() != true {
             return;
-        }*/
+        }
 
         self.pending_transactions.push(transaction);
     }
 
-    //
+    // private function for creating genesis block for blockchain
     fn add_genesis_block(&mut self) {
         let mut genesis_block: Block = Block::new(self.id, vec![0; 32], vec![]);
         genesis_block.mine_block();
         self.chain.push(genesis_block);
     }
 
-    //
+    //private function for incrementing the ID for the next blocks being added to blockchain instance
     fn increment_id(&mut self) -> u32 {
         self.id = self.id + 1;
         return self.id;

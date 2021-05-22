@@ -85,7 +85,5 @@ fn main() {
         display_mining_addr();
     }
 
-    //TODO: find a way to store onyx blockchain data (impl in lib.rs)
-
     println!("--- END ---");
 }

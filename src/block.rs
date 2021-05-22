@@ -30,6 +30,7 @@ impl Block {
             let hash = self.hash();
             if validate_hash(hash.clone()) == true {
                 self.hash = hash;
+                println!("--- Block Mined ---");
                 return;
             }
         }

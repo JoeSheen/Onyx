@@ -13,7 +13,8 @@ impl Wallet {
             public_key: keypair.public,
             secret_key: keypair.secret,
         };
-        register_mining_addr(wallet.public_key);  // adds public key to MINING_ADDR
+        println!("--- Wallet Created ---");
+        register_mining_addr(wallet.public_key);  // adds public key to MINING_ADDR (lib.rs)
         return wallet;
     }
 }

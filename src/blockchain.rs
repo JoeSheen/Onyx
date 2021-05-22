@@ -77,6 +77,7 @@ impl Blockchain {
         }
 
         self.pending_transactions.push(transaction);
+        println!("--- Transaction Pending ---")
     }
 
     // private function for creating genesis block for blockchain

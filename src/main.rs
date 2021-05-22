@@ -1,8 +1,10 @@
 use onyxlib::*;
 use ed25519_dalek::*;
 use rand::Rng; // added RNG for testing purposes
+use std::io::{*, self};
 
 fn main() {
+    let mut input = String::new();
     println!("--- START ---");
 
     let mut blockchain: Blockchain = Blockchain::new();
@@ -67,13 +69,23 @@ fn main() {
         }
     }
 
-    println!("------\nblockchain length: {:?}", blockchain.chain.len());
+    println!("\nBlockchain length: {:?}", blockchain.chain.len());
     print!("Is blockchain valid?: ");
     if blockchain.is_valid() == true {
-        println!("YES!")
+        println!("YES!\n")
     } else {
-        println!("NO!")
+        println!("NO!\n")
     }
+
+    // lists the public keys of all the miners (gives the user the option Y=Yes or N=No)
+    print!("List Miners (Y/N): ");
+    let _ = stdout().flush();
+    io::stdin().read_line(&mut input).expect("Error: failed to read line");
+    if input.to_uppercase().trim() == "Y" {
+        display_mining_addr();
+    }
+
+    //TODO: find a way to store onyx blockchain data (impl in lib.rs)
 
     println!("--- END ---");
 }

@@ -65,3 +65,13 @@ pub fn register_mining_addr(public_key: PublicKey) {
         MINING_ADDR.push(public_key);
     }
 }
+
+// function for displaying miners public addr
+pub fn display_mining_addr() {
+    unsafe {
+        for pub_key in MINING_ADDR.clone() {
+            println!("   - Miner Public Key: {}", hex::encode(pub_key))
+        }
+        println!("   - Total Number of Miners: {}\n", MINING_ADDR.len());
+    }
+}

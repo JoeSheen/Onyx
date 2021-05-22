@@ -65,9 +65,9 @@ impl Blockchain {
             self.add_genesis_block();
         }
 
-        // check to see if sender and receiver addresses are valid
+        // check to see if sender and receiver addresses are valid (uses unsafe)
         unsafe {
-            if !MINING_ADDR.contains(&transaction.sender) && !MINING_ADDR.contains(&transaction.reciever) {
+            if !MINING_ADDR.contains(&transaction.sender) || !MINING_ADDR.contains(&transaction.reciever) {
                 println!("Error: invalid address")
             }
         }

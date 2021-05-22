@@ -7,19 +7,23 @@ pub struct Transaction {
     pub reciever: PublicKey,
     pub amount: f32,
     pub signature: Option<Signature>,
+    pub hash: Vec<u8>,
 }
 
 impl Transaction {
     // function for creating a new transaction
     pub fn new(sender_key: PublicKey, reciever_key: PublicKey, amt: f32) -> Transaction {
-        let time = now();
-        return Transaction {
+        let time: u128 = now();
+        let mut transaction: Transaction = Transaction {
             timestamp: time,
             sender: sender_key,
             reciever: reciever_key,
             amount: amt,
             signature: None,
+            hash: vec![0; 32],
         };
+        transaction.hash = transaction.hash();
+        return transaction;
     }
 
     // function that can be used to sign transactions
@@ -52,15 +56,18 @@ impl Hash for Transaction {
 // implementation of is_valid function for valid trait for transactions
 impl Valid for Transaction {
     fn is_valid(&self) -> bool {
-        //todo!()
-        return true;
+        if self.hash != vec![0; 32] {
+            return true;
+        } else {
+            return false;
+        }
     }
 }
 
 // implementation of fmt::Display for Transaction
 impl fmt::Display for Transaction {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "      - timestamp: {}\n      - sender: {}\n      - reciever: {}\n      - amount: {}\n      - signature: {}", 
+        write!(f, "      - timestamp: {}\n      - sender: {}\n      - reciever: {}\n      - amount: {}\n      - signature: {}\n      - hash: {}", 
             self.timestamp,
             hex::encode(self.sender),
             hex::encode(self.reciever),
@@ -69,7 +76,8 @@ impl fmt::Display for Transaction {
                 hex::encode(signature)
             } else {
                 "None".to_owned()
-            }
+            },
+            hex::encode(self.hash.clone()),
         )
     }
 }

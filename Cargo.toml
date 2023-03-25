@@ -2,7 +2,7 @@
 name = "onyx"
 version = "0.1.0"
 authors = ["Joe Sheen <joe123sheen@hotmail.com>"]
-edition = "2018"
+edition = "2021"
 
 [lib]
 name = "onyxlib"
